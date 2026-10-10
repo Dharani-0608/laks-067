@@ -1,0 +1,28 @@
+import com.sun.net.httpserver.HttpExchange;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
+public class ResponseUtil {
+
+    public static void send(
+            HttpExchange exchange,
+            String response) throws IOException {
+
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Origin", "*");
+
+        exchange.getResponseHeaders().set(
+                "Content-Type",
+                "application/json; charset=UTF-8");
+
+        byte[] data =
+                response.getBytes(StandardCharsets.UTF_8);
+
+        exchange.sendResponseHeaders(200, data.length);
+
+        OutputStream out = exchange.getResponseBody();
+        out.write(data);
+        out.close();
+    }
+}
