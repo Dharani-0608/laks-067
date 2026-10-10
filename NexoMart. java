@@ -1,0 +1,41 @@
+import com.sun.net.httpserver.HttpServer;
+import java.net.InetSocketAddress;
+
+public class NexoMart {
+
+    static Product[] products = {
+        new Product(1, "Smartphone", "Electronics", 15000, "📱"),
+        new Product(2, "Laptop", "Electronics", 45000, "💻"),
+        new Product(3, "Headphones", "Accessories", 2500, "🎧"),
+        new Product(4, "Smart Watch", "Accessories", 3500, "⌚"),
+        new Product(5, "Shoes", "Fashion", 1800, "👟"),
+        new Product(6, "Backpack", "Fashion", 1200, "🎒")
+    };
+
+    public static void main(String[] args) throws Exception {
+
+        HttpServer server =
+                HttpServer.create(new InetSocketAddress(8081), 0);
+
+        server.createContext("/products",
+                new ProductHandler(products));
+
+        server.createContext("/cart/add",
+                new CartHandler(products));
+
+        server.createContext("/cart",
+                new CartHandler(products));
+
+        server.createContext("/checkout",
+                new CheckoutHandler());
+
+        server.createContext("/payment",
+                new PaymentHandler());
+
+        server.start();
+
+        System.out.println("NEXO MART");
+        System.out.println("Backend started successfully!");
+        System.out.println("http://localhost:8081");
+    }
+}
