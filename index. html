@@ -1,1 +1,150 @@
-<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>NexoMart</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>🛍️ NexoMart</h1>
+
+    <button class="cart-btn" onclick="showCart()">
+        🛒 Cart (<span id="cartCount">0</span>)
+    </button>
+</header>
+
+<div class="container">
+
+    <!-- PRODUCTS -->
+
+    <div id="productsSection" class="section active">
+
+        <h1 style="margin-bottom:25px;">
+            Our Products
+        </h1>
+
+        <div id="products" class="products"></div>
+
+    </div>
+
+
+    <!-- CART -->
+
+    <div id="cartSection" class="section">
+
+        <div class="box">
+
+            <h1>🛒 Your Cart</h1>
+
+            <br>
+
+            <div id="cartItems"></div>
+
+            <h2 style="margin-top:20px;">
+                Total: ₹<span id="cartTotal">0</span>
+            </h2>
+
+            <button class="action-btn"
+                    onclick="checkout()">
+                Proceed to Checkout
+            </button>
+
+            <br>
+
+            <button class="cart-btn"
+                    style="margin-top:15px;"
+                    onclick="backToProducts()">
+                ← Continue Shopping
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- CHECKOUT -->
+
+    <div id="checkoutSection" class="section">
+
+        <div class="box">
+
+            <h1>📦 Checkout</h1>
+
+            <br>
+
+            <p>
+                Number of Items:
+                <strong id="checkoutItems">0</strong>
+            </p>
+
+            <br>
+
+            <h2>
+                Total Amount:
+                ₹<span id="checkoutTotal">0</span>
+            </h2>
+
+            <button class="payment-btn"
+                    onclick="payment()">
+                💳 Proceed to Payment
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENT SUCCESS -->
+
+    <div id="successSection" class="section">
+
+        <div class="box success">
+
+            <h2>✅ Payment Successful!</h2>
+
+            <p>
+                Your order has been placed successfully.
+            </p>
+
+            <br>
+
+            <p>
+                Amount Paid:
+                <strong>
+                    ₹<span id="paidAmount">0</span>
+                </strong>
+            </p>
+
+            <br>
+
+            <p>
+                Order ID:
+                <strong id="orderId"></strong>
+            </p>
+
+            <br>
+
+            <button class="cart-btn"
+                    onclick="backToProducts()">
+                Continue Shopping
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
