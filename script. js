@@ -1,0 +1,280 @@
+const API = "http://localhost:8081";
+
+let cartCount = 0;
+
+
+// LOAD PRODUCTS
+
+async function loadProducts() {
+
+    try {
+
+        const response = await fetch(`${API}/products`);
+        const products = await response.json();
+
+        const container = document.getElementById("products");
+
+        container.innerHTML = "";
+
+        products.forEach(product => {
+
+            container.innerHTML += `
+                <div class="card">
+
+                    <div class="icon">
+                        ${product.icon}
+                    </div>
+
+                    <h2>${product.name}</h2>
+
+                    <p class="category">
+                        ${product.category}
+                    </p>
+
+                    <p class="price">
+                        ₹${product.price}
+                    </p>
+
+                    <button class="add-btn"
+                            onclick="addToCart(${product.id})">
+                        🛒 Add to Cart
+                    </button>
+
+                </div>
+            `;
+
+        });
+
+    } catch (error) {
+
+        alert(
+            "Backend not connected! Start NexoMart.java first."
+        );
+
+        console.log(error);
+    }
+}
+
+
+// ADD TO CART
+
+async function addToCart(id) {
+
+    try {
+
+        const response =
+            await fetch(`${API}/cart/add?id=${id}`);
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            alert("✅ " + data.message);
+
+            cartCount++;
+
+            document.getElementById(
+                "cartCount"
+            ).innerText = cartCount;
+
+        } else {
+
+            alert("❌ " + data.message);
+        }
+
+    } catch (error) {
+
+        alert("Backend connection failed!");
+
+        console.log(error);
+    }
+}
+
+
+// SHOW CART
+
+async function showCart() {
+
+    hideAll();
+
+    document.getElementById(
+        "cartSection"
+    ).classList.add("active");
+
+    try {
+
+        const response =
+            await fetch(`${API}/cart`);
+
+        const data =
+            await response.json();
+
+        const items =
+            document.getElementById("cartItems");
+
+        items.innerHTML = "";
+
+        if (data.items.length === 0) {
+
+            items.innerHTML =
+                "<p>Your cart is empty.</p>";
+
+            document.getElementById(
+                "cartTotal"
+            ).innerText = "0";
+
+            return;
+        }
+
+        data.items.forEach(item => {
+
+            items.innerHTML += `
+                <div class="item">
+
+                    <span>${item.name}</span>
+
+                    <strong>
+                        ₹${item.price}
+                    </strong>
+
+                </div>
+            `;
+
+        });
+
+        document.getElementById(
+            "cartTotal"
+        ).innerText = data.total;
+
+        cartCount = data.count;
+
+        document.getElementById(
+            "cartCount"
+        ).innerText = cartCount;
+
+    } catch (error) {
+
+        alert("Unable to load cart.");
+
+        console.log(error);
+    }
+}
+
+
+// CHECKOUT
+
+async function checkout() {
+
+    try {
+
+        const response =
+            await fetch(`${API}/checkout`);
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+
+            alert("❌ " + data.message);
+            return;
+        }
+
+        hideAll();
+
+        document.getElementById(
+            "checkoutSection"
+        ).classList.add("active");
+
+        document.getElementById(
+            "checkoutItems"
+        ).innerText = data.items;
+
+        document.getElementById(
+            "checkoutTotal"
+        ).innerText = data.total;
+
+    } catch (error) {
+
+        alert("Checkout failed!");
+
+        console.log(error);
+    }
+}
+
+
+// PAYMENT
+
+async function payment() {
+
+    try {
+
+        const response =
+            await fetch(`${API}/payment`);
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+
+            alert("❌ " + data.message);
+            return;
+        }
+
+        hideAll();
+
+        document.getElementById(
+            "successSection"
+        ).classList.add("active");
+
+        document.getElementById(
+            "paidAmount"
+        ).innerText = data.amount;
+
+        document.getElementById(
+            "orderId"
+        ).innerText = data.order;
+
+        cartCount = 0;
+
+        document.getElementById(
+            "cartCount"
+        ).innerText = "0";
+
+    } catch (error) {
+
+        alert("Payment failed!");
+
+        console.log(error);
+    }
+}
+
+
+// BACK TO PRODUCTS
+
+function backToProducts() {
+
+    hideAll();
+
+    document.getElementById(
+        "productsSection"
+    ).classList.add("active");
+}
+
+
+// HIDE ALL SECTIONS
+
+function hideAll() {
+
+    document.querySelectorAll(
+        ".section"
+    ).forEach(section => {
+
+        section.classList.remove("active");
+
+    });
+}
+
+
+// START
+
+loadProducts();
